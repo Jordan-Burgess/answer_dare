@@ -24,11 +24,7 @@ class All{
     }
 }
 
-
-let typeIn = 1
-let true_false = 2
-let multiChoice = 3
-
+// TypeIn = 1; True_False = 2; Multiple Choice = 3
 let questions = [
 
     // new All(1,"What is always in front of you, but can’t be seen?","future"),
@@ -65,46 +61,96 @@ let questions = [
     new All(3,"What is your body's largest organ?","Skin",["Heart","Skin","Pennis"])
 ]
 
-let actions = ['Do 10 push ups','Twerk for one minute.','sing','smile',"Do your best impression of me.","Show the last five things in your browser history."]
+let actions = [
+    'Do 10 push ups',
+    'Twerk for one minute.',
+    'sing',
+    'smile',
+    "Do your best impression of me.",
+    "Show the last five things in your browser history.",
+]
 
-let h1tag = document.querySelector('h1')
-let next = document.querySelector('.next')
-let introduction = document.querySelector('.introduction')
+let allNames = []
+
+let gameLaunchElem = document.querySelector('.gameLaunch')
+let newPlayerElem = document.querySelector('#newPlayer')
+let nameForm = document.querySelector('.nameForm')
+let gameStartElem = document.querySelector('.gameStart')
+
+gameLaunchElem.addEventListener('click', (event) =>{
+    event.stopPropagation()
+    gameLaunchElem.style.display = 'none'
+    // Remove Game Greeting / Add ScoreBoard
+    document.querySelector('#gameTitle').style.display = 'none'
+    document.querySelector('#introduction').style.display = 'none'
+    document.querySelector('#playerBoard').style.display = 'block'
+    document.querySelector('#scoreBoard').style.display = 'block'
+    newPlayerElem.style.display = 'block'
+})
+
+newPlayerElem.addEventListener('click', (event) =>{
+    event.stopPropagation()
+    nameForm.style.display = 'block'
+})
+
+nameForm.addEventListener('submit', (event) =>{
+    event.preventDefault()
+    let playerBoardElem = document.querySelector('#playerBoard')
+    let scoreBoardElem = document.querySelector('#scoreBoard')
+    let nameInput = document.querySelector('.nameInput')
+    
+    // Add Player Name and Score to Board
+    let playerListItem = document.createElement('li')
+    let scoreListItem = document.createElement('li')
+      
+    let person = new Player(nameInput.value)
+    playerListItem.innerText = person.lname
+    playerListItem.className = person.lname
+    scoreListItem.innerText = person.score
+    scoreListItem.className = `${person.lname}score`
+
+    allNames.push(person)
+
+    playerBoardElem.appendChild(playerListItem)
+    scoreBoardElem.appendChild(scoreListItem)
+    
+    nameInput.value = ''
+    nameForm.style.display = 'none'
+
+    gameStartElem.style.display = 'block'
+})
+
+
+
+
+
+
+
+
+
 let section2 = document.querySelector('.section2')
 let section3 = document.querySelector('.section3')
 let section4 = document.querySelector('.section4')
 let section5 = document.querySelector('.section5')
+
+
 section5.style.display = 'none'
-let ul1 = document.querySelector('.ul1')
-let ul2 = document.querySelector('.ul2')
-ul1.style.display = 'none'
-ul2.style.display = 'none'
-let nameForm = document.querySelector('.nameForm')
-let allNames = []
-let players = document.createElement('p')
-let scores = document.createElement('p')
-ul1.appendChild(players)
-ul2.appendChild(scores)
-let nameInput = document.createElement('input')
-nameInput.classList.add('nameInput')
 
 
-let person = null
-let theName = null
-let createPlayer = document.createElement('button')
-createPlayer.classList.add("newplayer")
-let start = document.createElement('button')
-start.classList.add('start')
+
+
+
+
+
+
 let pic1 = document.createElement('img')
 pic1.classList.add('pic1')
 let pic2 = document.createElement('img')
 pic2.classList.add('pic2')
 let next2 = document.createElement('button')
 next2.classList.add('next2')
-let submitName = document.createElement('button')
-submitName.classList.add('submitName')
-let addRequest = document.createElement('p')
-addRequest.classList.add('addRequest')
+
+
 
 let choiceText = document.createElement('p')
 choiceText.classList.add('choiceT')
@@ -167,55 +213,10 @@ function gameStatus(active){
 }
 
 
-next.addEventListener('click', (event) =>{
-    event.stopPropagation()
-    h1tag.style.display = 'none'
-    next.style.display = 'none'
-    introduction.style.display = 'none'
 
-    ul1.style.display = 'block'
-    ul2.style.display = 'block'
-    players.innerText = "Players"
-    scores.innerText = "Scores"
-    createPlayer.innerText = "+ add new player"
-    addRequest.innerText = "please add new player"
-    
-    section2.appendChild(createPlayer)
-    section2.appendChild(addRequest)
-})
 
-createPlayer.addEventListener('click', (event) =>{
-    event.stopPropagation()
 
-    submitName.innerText = 'submit'
-    submitName.type = 'submit'
-    nameForm.appendChild(nameInput)
-    nameForm.appendChild(submitName)
-    nameInput.style.display = 'block'
-    submitName.style.display = 'block'
-   
-})
 
-nameForm.addEventListener('submit', (event) =>{
-    event.preventDefault()
-    nameInput.style.display = 'none'
-    submitName.style.display = 'none'
-
-    let li1 = document.createElement('li')
-    let li2 = document.createElement('li')
-
-    theName = nameInput.value       
-    person = new Player(theName)
-    li1.innerText = person.lname
-    li1.className = person.lname
-    li2.innerText = person.score
-    li2.className = `${person.lname}score`
-    allNames.push(person)
-    ul1.appendChild(li1)
-    ul2.appendChild(li2)
-    section2.appendChild(start)
-    start.innerText = 'Start'
-})
 
 function shuffleQ(deck){
     let currentIndex =  deck.length
@@ -227,10 +228,9 @@ function shuffleQ(deck){
     }
 }
      
-start.addEventListener('click', (event) =>{
-    createPlayer.style.display = 'none'
-    addRequest.style.display = 'none'
-    start.style.display = 'none' 
+gameStartElem.addEventListener('click', (event) =>{
+    newPlayerElem.style.display = 'none'
+    gameStartElem.style.display = 'none' 
        
     shuffleQ(questions)
     shuffleQ(actions)
